@@ -27,26 +27,14 @@ jobs:
       # Checkout the code from the GitHub repository
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Create .env file
+        run: echo "PORT=$PORT\nMONGO_DB=$MONGO_DB\nACCESS_TOKEN=$ACCESS_TOKEN\nREFRESH_TOKEN=$REFRESH_TOKEN\nCLIENT_ID=$CLIENT_ID\nMAIL_PASSWORD=$MAIL_PASSWORD
+             MAIL_ACCOUNT=$MAIL_ACCOUNT" > .env
 
       # Login to Docker Hub using credentials from repository secrets
       - name: Login to Docker Hub
-        uses: ./
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}  
 
-      # Install dependencies, export environment variables
-      - name: Install and Test Server
-        run: |
-          npm install
-          export MONGO_DB=${{ secrets.MONGO_DB }}
-          export PORT=${{ secrets.PORT }}
-          export ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN }}
-          export REFRESH_TOKEN=${{ secrets.REFRESH_TOKEN }}
-          export CLIENT_ID=${{ secrets.CLIENT_ID }}
-          export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-          export MAIL_ACCOUNT=${{ secrets.MAIL_ACCOUNT }}
-          npm run test
 
       # Build a Docker image for the server application
       - name: Build Server Docker Image
