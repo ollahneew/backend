@@ -7,15 +7,6 @@ on:
     branches:
       - main
 
-# Set environment variables
-env:
-  PORT: ${{ vars.PORT }}
-  MONGO_DB: ${{ vars.MONGO_DB }}
-  ACCESS_TOKEN: ${{ vars.ACCESS_TOKEN }}
-  REFRESH_TOKEN: ${{ vars.REFRESH_TOKEN }}
-  CLIENT_ID: ${{ vars.CLIENT_ID }}
-  MAIL_PASSWORD: ${{ vars.MAIL_PASSWORD }}
-  MAIL_ACCOUNT: ${{ vars.MAIL_ACCOUNT }}
 # This is the workflow that is being run.
 jobs:
   build-and-deploy:
@@ -27,8 +18,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Create .env file
-        run: echo "PORT=$PORT\nMONGO_DB=$MONGO_DB\nACCESS_TOKEN=$ACCESS_TOKEN\nREFRESH_TOKEN=$REFRESH_TOKEN\nCLIENT_ID=$CLIENT_ID\nMAIL_PASSWORD=$MAIL_PASSWORD
-             MAIL_ACCOUNT=$MAIL_ACCOUNT" > .env
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_PORT: ${{ vars.PORT }}
+          envkey_MONGO_DB: ${{ vars.MONGO_DB }}
+          envkey_ACCESS_TOKEN: ${{ vars.ACCESS_TOKEN }} 
+          envkey_REFRESH_TOKEN: ${{ vars.REFRESH_TOKEN }}
+          envkey_CLIENT_ID: ${{ vars.CLIENT_ID }}
+          envkey_MAIL_PASSWORD: ${{ vars.MAIL_PASSWORD }}
+          envkey_MAIL_ACCOUNT: ${{ vars.MAIL_ACCOUNT }}
+
 
       # Login to Docker Hub using credentials from repository secrets
       - name: Login to Docker Hub
