@@ -48,7 +48,7 @@ jobs:
           docker push ollah/ecomerce:server-${{github.run_number}}
    # Job 2: Deploy to server
   deploy:
-    needs: build_and_test
+    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to server
